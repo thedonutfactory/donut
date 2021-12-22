@@ -1,7 +1,3 @@
-/*
-Copyright © 2021 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
@@ -13,7 +9,7 @@ import (
 
 // replCmd represents the repl command
 var replCmd = &cobra.Command{
-	Use:   "repl",
+	Use:   "eval",
 	Short: "Run donut language inline",
 	Long:  `Run the donut programming environment in interactive mode.`,
 	Run: func(cmd *cobra.Command, args []string) {

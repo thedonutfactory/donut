@@ -1,7 +1,3 @@
-/*
-Copyright © 2021 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
@@ -16,7 +12,7 @@ import (
 
 // runCmd represents the run command
 var runCmd = &cobra.Command{
-	Use:   "run [*.cipher]",
+	Use:   "run *.cipher",
 	Short: "Execute a compiled .cipher file",
 	Long:  `Execute a compiled .cipher file containing compiled homomorphic bytecode.`,
 	Args:  cobra.MinimumNArgs(1),
@@ -61,7 +57,4 @@ func appendCall(bytecode *compiler.Bytecode) {
 
 func init() {
 	rootCmd.AddCommand(runCmd)
-	//compileCmd.Flags().StringP("file", "ff", "", "donut box run -f foo.cipher")
-	//compileCmd.MarkFlagRequired("file")
-
 }

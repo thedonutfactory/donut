@@ -1,10 +1,14 @@
+// a simple function that adds two numbers
 let addTwoNumbers = func(x, y) {
     return x + y
 }
 
 /*
- * Main entrypoint of the application
-**/
+*
+* Every donut app has to have a main entrypoint
+*/
 let main = func() {
-    return addTwoNumbers(22, 33)
+    let a = 22
+    let b = 33
+    return addTwoNumbers(a, b)
 }

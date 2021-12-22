@@ -1,7 +1,3 @@
-/*
-Copyright © 2021 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
@@ -17,11 +13,11 @@ import (
 
 // compileCmd represents the compile command
 var compileCmd = &cobra.Command{
-	Use:   "compile [*.donut]",
-	Short: "Compile .donut programs into intermediate bytecode",
-	Long: `Compile .donut programs into intermediate bytecode to be executed
+	Use:   "compile *.donut",
+	Short: "Compile a .donut program into intermediate bytecode",
+	Long: `Compile a .donut program into intermediate bytecode to be executed
 by fully homomorphic runtime environments. Resultant bytecode files (.cipher)
-can be executed by running the "run" command`,
+can be executed with the "run" command`,
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		f := args[0]
@@ -53,7 +49,7 @@ can be executed by running the "run" command`,
 			return
 		}
 
-		debug, err := cmd.Flags().GetBool("debug")
+		debug, err := cmd.Flags().GetBool("instr")
 		if err != nil {
 			fmt.Print(err)
 		}
@@ -78,5 +74,5 @@ can be executed by running the "run" command`,
 func init() {
 	rootCmd.AddCommand(compileCmd)
 
-	compileCmd.Flags().BoolP("debug", "d", false, "donutbox compile -d -f foo.cipher")
+	compileCmd.Flags().BoolP("instr", "i", false, "view bytecode instructions")
 }

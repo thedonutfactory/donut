@@ -1,7 +1,3 @@
-/*
-Copyright © 2021 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
@@ -15,8 +11,9 @@ var (
 	inputs []int32
 
 	transactionCmd = &cobra.Command{
-		Use:   "transaction",
-		Short: "Create a transaction call",
+		Aliases: []string{"txn"},
+		Use:     "transaction",
+		Short:   "Create a transaction call",
 		Long: `Create a new transaction to the runtime environment, passing function
 	name and arguments`,
 		Run: func(cmd *cobra.Command, args []string) {
