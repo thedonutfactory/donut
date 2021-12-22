@@ -14,7 +14,7 @@ import (
 
 // keysCmd represents the keys command
 var keysCmd = &cobra.Command{
-	Use:   "gen-keys",
+	Use:   "keys",
 	Short: "Generate public and private keys",
 	Long: `Generate public and private keys to execute fully homomorphic programs. Public keys
 can be used by third parties to execute programs securely.`,
@@ -26,6 +26,7 @@ can be used by third parties to execute programs securely.`,
 		prvKeyFile, _ := cmd.Flags().GetString("private")
 		io.WritePrivKey(privKey, pubKeyFile)
 		io.WritePubKey(pubKey, prvKeyFile)
+		fmt.Printf("Generated keys: %s, %s\n", pubKeyFile, prvKeyFile)
 	},
 }
 
