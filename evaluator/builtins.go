@@ -4,11 +4,14 @@ import (
 	"github.com/thedonutfactory/donutbox/object"
 )
 
-var builtins = map[string]*object.Builtin{
-	object.BuiltinFuncNameLen:   object.GetBuiltinByName(object.BuiltinFuncNameLen),
-	object.BuiltinFuncNamePuts:  object.GetBuiltinByName(object.BuiltinFuncNamePuts),
-	object.BuiltinFuncNameFirst: object.GetBuiltinByName(object.BuiltinFuncNameFirst),
-	object.BuiltinFuncNameLast:  object.GetBuiltinByName(object.BuiltinFuncNameLast),
-	object.BuiltinFuncNameRest:  object.GetBuiltinByName(object.BuiltinFuncNameRest),
-	object.BuiltinFuncNamePush:  object.GetBuiltinByName(object.BuiltinFuncNamePush),
+var builtinFunctions = map[string]*object.Builtin{
+	"len":   object.GetBuiltinByName("len"),
+	"print": object.GetBuiltinByName("print"),
+	"first": object.GetBuiltinByName("first"),
+	"last":  object.GetBuiltinByName("last"),
+	"rest":  object.GetBuiltinByName("rest"),
+	"push":  object.GetBuiltinByName("push"),
+	"pop":   object.GetBuiltinByName("pop"),
+	"split": object.GetBuiltinByName("split"),
+	"join":  object.GetBuiltinByName("join"),
 }

@@ -1,39 +1,38 @@
 package token
 
-type TokenType string
-
-type Token struct {
-	Type    TokenType
-	Literal string
-}
-
+// Define all of monkey's tokens
 const (
-	Illegal = "Illegal"
-	EOF     = "EOF"
+	Illegal = "ILLEGAL" // Token/character we don't know about
+	EOF     = "EOF"     // End of file
 
-	// Identifiers + Literals
-	Identifier = "Identifier" // add, x ,y, ...
-	Int        = "Int"        // 123456
-	String     = "String"     // "x", "y"
+	// Identifiers & literals
+	Identifier = "IDENTIFIER" // add, foobar, x, y, ...
+	Integer    = "INTEGER"
+	String     = "STRING"
 
 	// Operators
-	Assign   = "="
-	Plus     = "+"
-	Minus    = "-"
-	Bang     = "!"
-	Asterisk = "*"
-	Slash    = "/"
-	Equal    = "=="
-	NotEqual = "!="
-
-	LessThan    = "<"
-	GreaterThan = ">"
+	Equal        = "="
+	Plus         = "+"
+	PlusPlus     = "++"
+	Minus        = "-"
+	MinusMinus   = "--"
+	Star         = "*"
+	Slash        = "/"
+	Mod          = "%"
+	Bang         = "!"
+	EqualEqual   = "=="
+	Less         = "<"
+	LessEqual    = "<="
+	Greater      = ">"
+	GreaterEqual = ">="
+	BangEqual    = "!="
+	And          = "&&"
+	Or           = "||"
 
 	// Delimiters
-	Comma     = ","
-	Semicolon = ";"
-	Colon     = ":"
-
+	Comma        = ","
+	Colon        = ":"
+	Semicolon    = ";"
 	LeftParen    = "("
 	RightParen   = ")"
 	LeftBrace    = "{"
@@ -42,18 +41,30 @@ const (
 	RightBracket = "]"
 
 	// Keywords
-	Function = "Function"
-	Let      = "Let"
-	True     = "True"
-	False    = "False"
-	If       = "If"
-	Else     = "Else"
-	Return   = "Return"
+	Function = "FUNCTION"
+	Let      = "LET"
+	Const    = "CONST"
+	True     = "TRUE"
+	False    = "FALSE"
+	If       = "IF"
+	Else     = "ELSE"
+	Return   = "RETURN"
 )
 
-var keywords = map[string]TokenType{
-	"fn":     Function,
+// Type is a type alias for a string
+type Type string
+
+// Token is a struct representing a Monkey token - holds a Type and a Literal
+type Token struct {
+	Type    Type
+	Literal string
+	Line    int
+}
+
+var keywords = map[string]Type{
+	"func":   Function,
 	"let":    Let,
+	"const":  Const,
 	"true":   True,
 	"false":  False,
 	"if":     If,
@@ -61,9 +72,12 @@ var keywords = map[string]TokenType{
 	"return": Return,
 }
 
-func LookupIdentifierType(identifier string) TokenType {
-	if tok, ok := keywords[identifier]; ok {
-		return tok
+// LookupIdentifier checks our keywords map for the scanned keyword. If it finds one, then
+// the keywords Type is returned. If not, the user defined IDENTIFIER is returned
+func LookupIdentifier(identifier string) Type {
+	if token, ok := keywords[identifier]; ok {
+		return token
 	}
+
 	return Identifier
 }

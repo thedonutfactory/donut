@@ -1,7 +1,10 @@
-let addTwoNumbers = fn(x, y) {
+let addTwoNumbers = func(x, y) {
     return x + y
 }
 
-let main = fn() {
+/*
+ * Main entrypoint of the application
+**/
+let main = func() {
     return addTwoNumbers(22, 33)
 }

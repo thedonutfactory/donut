@@ -31,7 +31,7 @@ var runCmd = &cobra.Command{
 		bytecode := bc.Bytecode
 
 		//constants := []object.Object{}
-		globals := make([]object.Object, vm.GlobalSize)
+		globals := make([]object.Object, vm.GlobalsSize)
 		symbolTable := compiler.NewSymbolTable()
 		for i, v := range object.Builtins {
 			symbolTable.DefineBuiltin(i, v.Name)
@@ -40,14 +40,14 @@ var runCmd = &cobra.Command{
 		// add call to main
 		appendCall(bytecode)
 
-		machine := vm.NewWithGlobalsStore(bytecode, globals)
+		machine := vm.NewWithGlobalsState(bytecode, globals)
 		err = machine.Run()
 		if err != nil {
 			fmt.Printf("Error executing bytecode:\n %s\n", err)
 			return
 		}
 
-		lastPopped := machine.LastPoppedStackElem()
+		lastPopped := machine.LastPoppedStackElement()
 		fmt.Println(lastPopped.Inspect())
 	},
 }

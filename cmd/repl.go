@@ -17,7 +17,8 @@ var replCmd = &cobra.Command{
 	Short: "Run donut language inline",
 	Long:  `Run the donut programming environment in interactive mode.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		repl.Start(os.Stdin, os.Stdout)
+		engine := "eval"
+		repl.Start(os.Stdin, os.Stdout, &engine)
 	},
 }
 
