@@ -1,0 +1,7 @@
+let addTwoNumbers = fn(x, y) {
+    return x + y
+}
+
+let main = fn() {
+    return addTwoNumbers(22, 33)
+}
