@@ -1,0 +1,5 @@
+.vscode
+**/*.key
+**/*.cipher
+**/*.txn
+
