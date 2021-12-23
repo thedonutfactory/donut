@@ -1,4 +1,4 @@
-<img src="images/gopher.png" alt="FHE Gopher" width="200"/>
+<img src="img/gopher.png" alt="FHE Gopher" width="200"/>
 
 # DonutBox 🍩
 DonutBox is an easy to use runtime for developing and executing fully homomorphic programs with a new programming language called `donut`.

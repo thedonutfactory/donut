@@ -2,4 +2,5 @@
 **/*.key
 **/*.cipher
 **/*.txn
+donutbox
 
