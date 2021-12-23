@@ -6,11 +6,11 @@ run:
 
 .PHONY: build-mac
 build-mac:
-	go build -o monkey *.go
+	go build -o donutbox *.go
 
 .PHONY: build-linux
 build-linux:
-	CGO_ENABLED=0 GOOS=linux go build -o monkey
+	CGO_ENABLED=0 GOOS=linux go build -o donutbox
 
 .PHONY: test
 test:
