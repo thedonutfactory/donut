@@ -1,6 +1,9 @@
 # DonutBox 🍩
 DonutBox is an easy to use runtime for developing and executing fully homomorphic programs with a new programming language called `donut`.
 
+## Fully Homomorphic Encryption
+Donutbox is a cryptosystem that supports arbitrary computation on ciphertexts known as fully homomorphic encryption (FHE). Under the hood it uses [go-tfhe](https://github.com/thedonutfactory/go-tfhe), which is the golang implementation of the TFHE scheme. ( The T in TFHE stands for Torus, which closely resembles a donut 🍩, ergo the name of the language and runtime) Donutbox enables the construction of programs for any desirable functionality, which can be run on encrypted inputs to produce an encryption of the result. Since Donutbox never decrypts its inputs, it can be run by an untrusted party without revealing its inputs and internal state. Donutbox has practical implications in the outsourcing of private computations, for instance, in the context of cloud computing.
+
 ## Buidl
 
 `go build -o donutbox`
