@@ -14,5 +14,5 @@ func (c *Closure) Type() ObjectType { return ClosureObj }
 
 // Inspect returns a string representation of the Closure with its address
 func (c *Closure) Inspect() string {
-	return fmt.Sprintf("Closure[%p]", c)
+	return fmt.Sprintf("Closure[%v]", c)
 }

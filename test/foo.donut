@@ -3,6 +3,11 @@ let addTwoNumbers = func(x, y) {
     return x + y
 }
 
+// how about three
+let addThreeNumbers = func(x, y, z) {
+    return x + y + z
+}
+
 /*
 *
 * Every donut app has to have a main entrypoint
@@ -12,3 +17,5 @@ let main = func() {
     let b = 33
     return addTwoNumbers(a, b)
 }
+
+addTwoNumbers(777, 888)

@@ -14,6 +14,7 @@ type DonutBytecode struct {
 }
 
 func NewDonutByteCode() *DonutBytecode {
+
 	return &DonutBytecode{
 		Version: 1,
 	}
@@ -29,15 +30,13 @@ func (key *DonutBytecode) read(filename string) error {
 
 type DonutTransaction struct {
 	Version  int8
-	Input    []int32
-	FuncName string
+	Bytecode *compiler.Bytecode
 }
 
-func NewDonutTransaction(input []int32, funcName string) *DonutTransaction {
+func NewDonutTransaction() *DonutTransaction {
 	return &DonutTransaction{
 		Version:  1,
-		Input:    input,
-		FuncName: funcName,
+		Bytecode: compiler.New().Bytecode(),
 	}
 }
 

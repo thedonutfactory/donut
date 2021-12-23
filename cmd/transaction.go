@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/thedonutfactory/donutbox/code"
+	"github.com/thedonutfactory/donutbox/object"
 )
 
 // transactionCmd represents the transaction command
@@ -12,13 +14,20 @@ var (
 
 	transactionCmd = &cobra.Command{
 		Aliases: []string{"txn"},
-		Use:     "transaction",
+		Use:     "transaction foo.cipher",
 		Short:   "Create a transaction call",
-		Long: `Create a new transaction to the runtime environment, passing function
+		Long: `Create a new transaction for the given bytecode, passing function
 	name and arguments`,
+		Args: cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("transaction called")
-			fn, err := cmd.Flags().GetString("function")
+			bc := NewDonutByteCode()
+			err := bc.read(args[0])
+			if err != nil {
+				fmt.Printf("Error reading bytecode:\n %s\n", err)
+				return
+			}
+
+			fn, err := cmd.Flags().GetInt("func")
 			if err != nil {
 				fmt.Println(err)
 				return
@@ -29,12 +38,27 @@ var (
 				return
 			}
 
-			txn := NewDonutTransaction(inputs, fn)
-			fmt.Println(txn)
+			txn := createTransactionCall(fn, inputs, bc)
 			txn.write(file)
+			fmt.Println("transaction created")
 		},
 	}
 )
+
+func createTransactionCall(funcIndex int, inputs []int32, bc *DonutBytecode) *DonutTransaction {
+	txn := NewDonutTransaction()
+	lenConst := len(bc.Bytecode.Constants)
+	for _, val := range inputs {
+		txn.Bytecode.Constants = append(txn.Bytecode.Constants, &object.Integer{Value: int64(val)})
+	}
+	txn.Bytecode.Instructions = append(txn.Bytecode.Instructions, code.Make(code.OpGetGlobal, funcIndex)...)
+	for i := 0; i < len(inputs); i++ {
+		txn.Bytecode.Instructions = append(txn.Bytecode.Instructions, code.Make(code.OpConstant, lenConst+i)...)
+	}
+	txn.Bytecode.Instructions = append(txn.Bytecode.Instructions, code.Make(code.OpCall, len(inputs))...)
+	txn.Bytecode.Instructions = append(txn.Bytecode.Instructions, code.Make(code.OpPop)...)
+	return txn
+}
 
 func init() {
 	rootCmd.AddCommand(transactionCmd)
@@ -51,9 +75,9 @@ func init() {
 
 	transactionCmd.Flags().Int32SliceVarP(&inputs, "input", "i", []int32{}, "Input Variables")
 
-	transactionCmd.Flags().StringP("function", "f", "main", "Entry function call to transaction")
+	transactionCmd.Flags().IntP("func", "n", 0, "Function index in the constant pool")
 	// transactionCmd.MarkFlagRequired("function")
 
-	transactionCmd.Flags().StringP("file", "o", "txn.out", "File name for transaction")
+	transactionCmd.Flags().StringP("file", "o", "in.txn", "File name for transaction")
 	// transactionCmd.MarkFlagRequired("file")
 }

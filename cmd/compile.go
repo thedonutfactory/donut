@@ -62,17 +62,13 @@ can be executed with the "run" command`,
 			fmt.Println(comp.Bytecode().Instructions.String())
 		}
 
-		code := comp.Bytecode()
-		bc := &DonutBytecode{
-			Version:  1,
-			Bytecode: code,
-		}
+		bc := NewDonutByteCode()
+		bc.Bytecode = comp.Bytecode()
 		bc.write(f[0:len(f)-6] + ".cipher")
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(compileCmd)
-
 	compileCmd.Flags().BoolP("instr", "i", false, "view bytecode instructions")
 }
