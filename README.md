@@ -26,12 +26,15 @@ let addThreeNumbers = func(x, y, z) {
 ```
 
 Compile the donut source file into intermediate bytecode (`foo.cipher`):
+
 `donutbox compile foo.donut`
 
 Create a transaction to execute against the 0th function, with inputs 234 and 100, outputting to a file called `in.txn`
+
 `donutbox txn foo.cipher -n 0 -i 234,100 -o in.txn`
 
 Execute the transaction against compiled bytecode:
+
 `donutbox exec in.txn foo.cipher`
 
 ## References
