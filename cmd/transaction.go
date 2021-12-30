@@ -5,6 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/thedonutfactory/donutbox/code"
+	"github.com/thedonutfactory/donutbox/global"
 	"github.com/thedonutfactory/donutbox/object"
 )
 
@@ -46,6 +47,26 @@ var (
 )
 
 func createTransactionCall(funcIndex int, inputs []int32, bc *DonutBytecode) *DonutTransaction {
+	txn := NewDonutTransaction()
+	lenConst := len(bc.Bytecode.Constants)
+	for _, val := range inputs {
+		if global.PriKey == nil {
+			fmt.Errorf("key is null")
+			return nil
+		}
+		ctxt := global.PriKey.Encrypt(int8(val))
+		txn.Bytecode.Constants = append(txn.Bytecode.Constants, &object.Ciphertext{Value: ctxt})
+	}
+	txn.Bytecode.Instructions = append(txn.Bytecode.Instructions, code.Make(code.OpGetGlobal, funcIndex)...)
+	for i := 0; i < len(inputs); i++ {
+		txn.Bytecode.Instructions = append(txn.Bytecode.Instructions, code.Make(code.OpConstant, lenConst+i)...)
+	}
+	txn.Bytecode.Instructions = append(txn.Bytecode.Instructions, code.Make(code.OpCall, len(inputs))...)
+	txn.Bytecode.Instructions = append(txn.Bytecode.Instructions, code.Make(code.OpPop)...)
+	return txn
+}
+
+func createTransactionCall2(funcIndex int, inputs []int32, bc *DonutBytecode) *DonutTransaction {
 	txn := NewDonutTransaction()
 	lenConst := len(bc.Bytecode.Constants)
 	for _, val := range inputs {

@@ -5,6 +5,7 @@ type ObjectType string
 
 // Define object types
 const (
+	CiphertextObj       = "CIPHERTEXT"
 	IntegerObj          = "INTEGER"
 	BooleanObj          = "BOOLEAN"
 	NullObj             = "NULL"

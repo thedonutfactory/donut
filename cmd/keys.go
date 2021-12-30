@@ -20,8 +20,8 @@ can be used by third parties to execute programs securely.`,
 		pubKey, privKey := gates.Default128bitGateBootstrappingParameters().GenerateKeys()
 		pubKeyFile, _ := cmd.Flags().GetString("public")
 		prvKeyFile, _ := cmd.Flags().GetString("private")
-		io.WritePrivKey(privKey, pubKeyFile)
-		io.WritePubKey(pubKey, prvKeyFile)
+		io.WritePrivKey(privKey, prvKeyFile)
+		io.WritePubKey(pubKey, pubKeyFile)
 		fmt.Printf("Generated keys: %s, %s\n", pubKeyFile, prvKeyFile)
 	},
 }

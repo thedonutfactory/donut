@@ -52,6 +52,7 @@ func init() {
 func initConfig() {
 
 	// register gob types
+	gob.Register(&object.Ciphertext{})
 	gob.Register(&object.HashKey{})
 	gob.Register(&object.Integer{})
 	gob.Register(&object.Boolean{})
@@ -80,7 +81,6 @@ func initConfig() {
 		viper.AddConfigPath(home + "/.donutbox")
 		viper.SetConfigType("yaml")
 		viper.SetConfigName("config")
-
 	}
 
 	viper.AutomaticEnv()

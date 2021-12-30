@@ -42,9 +42,13 @@ let addThreeNumbers = func(x, y, z) {
 
 `donutbox txn foo.cipher -n 0 -i 234,100 -o in.txn`
 
-4. Execute the transaction against compiled bytecode:
+4. Execute the transaction against compiled bytecode, saving the resulting ciphertext to `out.txn`:
 
-`donutbox exec in.txn foo.cipher`
+`donutbox exec in.txn foo.cipher -o out.txn`
+
+5. Decrypt and view the resuling ciphertext:
+
+`donutbox dec -f out.txn`
 
 ## References
 

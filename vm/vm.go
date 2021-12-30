@@ -6,6 +6,9 @@ import (
 	"github.com/thedonutfactory/donutbox/code"
 	"github.com/thedonutfactory/donutbox/compiler"
 	"github.com/thedonutfactory/donutbox/object"
+	"github.com/thedonutfactory/go-tfhe/gates"
+
+	global "github.com/thedonutfactory/donutbox/global"
 )
 
 // StackSize is an integer defining the size of our stack
@@ -342,9 +345,38 @@ func (vm *VM) executeBinaryOperation(op code.Opcode) error {
 		return vm.executeBinaryIntegerOperation(op, left, right)
 	case leftType == object.StringObj && rightType == object.StringObj:
 		return vm.executeBinaryStringOperation(op, left, right)
+	case leftType == object.CiphertextObj && rightType == object.CiphertextObj:
+		return vm.executeBinaryCiphertextOperation(op, left, right)
 	}
 
 	return fmt.Errorf("Unsupported types for binary operation: %s %s", leftType, rightType)
+}
+
+func (vm *VM) executeBinaryCiphertextOperation(op code.Opcode, left, right object.Object) error {
+	leftValue := left.(*object.Ciphertext).Value
+	rightValue := right.(*object.Ciphertext).Value
+
+	var result gates.Int
+
+	switch op {
+	case code.OpAdd:
+		fmt.Println("Executing homomorphic add operation")
+		result = global.Ops.Add(leftValue, rightValue, global.NB_BITS)
+	case code.OpSub:
+		result = global.Ops.Sub(leftValue, rightValue, global.NB_BITS)
+	case code.OpMul:
+		result = global.Ops.Mul(leftValue, rightValue, global.NB_BITS)
+	case code.OpDiv:
+		result = global.Ops.Div(leftValue, rightValue, global.NB_BITS)
+	case code.OpMod:
+		// TODO fixme
+		fmt.Printf("error, OpMod not currnetly implemented")
+		result = global.Ops.Div(leftValue, rightValue, global.NB_BITS)
+	default:
+		return fmt.Errorf("unknown ciphertext operator: %d", op)
+	}
+
+	return vm.push(&object.Ciphertext{Value: result})
 }
 
 func (vm *VM) executeBinaryIntegerOperation(op code.Opcode, left, right object.Object) error {
