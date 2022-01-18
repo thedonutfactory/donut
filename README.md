@@ -27,11 +27,6 @@ Let's put together the workflow: develop an FHE program with Donut, compile it i
 let addTwoNumbers = func(x, y) {
     return x + y
 }
-
-// how about three
-let addThreeNumbers = func(x, y, z) {
-    return x + y + z
-}
 ```
 
 2. Compile the donut source file into intermediate bytecode (`foo.cipher`):
