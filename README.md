@@ -1,6 +1,6 @@
 <img src="img/gopher.png" alt="FHE Gopher" width="200"/>
 
-# Donut 🍩
+# Donut Language and Runtime Environment 🍩
 Donut is an easy to use runtime for developing and executing fully homomorphic programs with a new programming language called `donut`.
 
 ## Fully Homomorphic Encryption
