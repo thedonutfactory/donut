@@ -37,7 +37,11 @@ let addTwoNumbers = func(x, y) {
 
 `donut txn foo.cipher -n 0 -i 234,100 -o in.txn`
 
-4. Execute the transaction against compiled bytecode:
+4. Execute the transaction against compiled bytecode, saving the resulting ciphertext to `out.txn`:
+
+`donut exec in.txn foo.cipher -o out.txn`
+
+5. Decrypt and view the resuling ciphertext:
 
 `donut exec in.txn foo.cipher`
 

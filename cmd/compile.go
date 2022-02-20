@@ -9,6 +9,8 @@ import (
 	"github.com/thedonutfactory/donutbox/lexer"
 	"github.com/thedonutfactory/donutbox/object"
 	"github.com/thedonutfactory/donutbox/parser"
+
+	"github.com/thedonutfactory/donutbox/global"
 )
 
 // compileCmd represents the compile command
@@ -39,7 +41,7 @@ can be executed with the "run" command`,
 		program := p.ParseProgram()
 
 		for _, msg := range p.Errors() {
-			fmt.Print(msg)
+			fmt.Println(msg)
 		}
 
 		comp := compiler.NewWithState(symbolTable, constants)
@@ -47,6 +49,19 @@ can be executed with the "run" command`,
 		if err != nil {
 			fmt.Printf("Compilation failed:\n %s\n", err)
 			return
+		}
+
+		// Encrypt the Constants Pool
+		for i, c := range comp.Bytecode().Constants {
+			// fmt.Println(c.Inspect())
+			if c.Type() == object.IntegerObj {
+				comp.Bytecode().Constants[i], err = encryptObject(c)
+				if err != nil {
+					fmt.Printf("Error encrypting constant: %s\n", err)
+					return
+				}
+				// fmt.Println(comp.Bytecode().Constants[i].Inspect())
+			}
 		}
 
 		debug, err := cmd.Flags().GetBool("instr")
@@ -66,6 +81,21 @@ can be executed with the "run" command`,
 		bc.Bytecode = comp.Bytecode()
 		bc.write(f[0:len(f)-6] + ".cipher")
 	},
+}
+
+func encryptObject(obj object.Object) (*object.Ciphertext, error) {
+	switch {
+	default:
+		return nil, fmt.Errorf("unknown ciphertext conversion for type : %s", obj.Type())
+	//case leftType == object.IntegerObj && rightType == object.IntegerObj:
+	//	return vm.executeBinaryIntegerOperation(op, left, right)
+	//case leftType == object.StringObj && rightType == object.StringObj:
+	//	return vm.executeBinaryStringOperation(op, left, right)
+	case obj.Type() == object.IntegerObj:
+		// return vm.executeBinaryCiphertextOperation(op, left, right)
+		val := obj.(*object.Integer).Value
+		return &object.Ciphertext{Value: global.PubKey.CipherBits(int(val), global.NB_BITS)}, nil
+	}
 }
 
 func init() {

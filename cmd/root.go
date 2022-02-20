@@ -23,7 +23,7 @@ compile the programs into encrypted intermediate bytecode, and build
 transactions to execute fully encrypted programs.`,
 		// Uncomment the following line if your bare application
 		// has an action associated with it:
-		// Run: func(cmd *cobra.Command, args []string) { },
+		// Run: func(cmd *cobra.Command, args []string) {},
 	}
 )
 
@@ -52,6 +52,7 @@ func init() {
 func initConfig() {
 
 	// register gob types
+	gob.Register(&object.Ciphertext{})
 	gob.Register(&object.HashKey{})
 	gob.Register(&object.Integer{})
 	gob.Register(&object.Boolean{})
@@ -80,7 +81,6 @@ func initConfig() {
 		viper.AddConfigPath(home + "/.donutbox")
 		viper.SetConfigType("yaml")
 		viper.SetConfigName("config")
-
 	}
 
 	viper.AutomaticEnv()

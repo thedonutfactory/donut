@@ -1,0 +1,26 @@
+/* Flattened if-else calculation
+ * In fully- homomorphic computations, 
+ * there is no branching, so jump statements are out
+ * 
+ * target source looks like:
+ *
+ * let calculate = func(x, y) {
+ *   if (x < 10) {
+ *       return x + y
+ *   } else {
+ *       return x - y
+ *   }
+ * }
+ *
+**/
+let ifElseFhe = func(x, y) {
+    // calculate that branching condition
+    let resultMask = x < 10;
+
+    // precalculate both branches, the consequence and alternative
+	let consequence = x + y;
+	let alternative = x - y;
+
+    // apply the condition mask to the results of both branches
+	return consequence*resultMask + alternative*(1-resultMask);
+}

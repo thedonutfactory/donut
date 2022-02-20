@@ -5,12 +5,14 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/thedonutfactory/donutbox/compiler"
+	"github.com/thedonutfactory/donutbox/global"
 	"github.com/thedonutfactory/donutbox/object"
 	"github.com/thedonutfactory/donutbox/vm"
+	"github.com/thedonutfactory/go-tfhe/io"
 )
 
-// runCmd represents the run command
-var runCmd = &cobra.Command{
+// execCmd represents the exec command
+var execCmd = &cobra.Command{
 	Use:   "exec *.txn *.cipher",
 	Short: "Execute a transaction on a compiled .cipher file",
 	Long: `Execute a transaction function call on compiled .cipher file 
@@ -20,7 +22,7 @@ containing compiled homomorphic bytecode.`,
 		txn := &DonutTransaction{Version: 1}
 		err := txn.read(args[0])
 		if err != nil {
-			fmt.Printf("Error reading bytecode:\n %s\n", err)
+			fmt.Printf("Error reading transaction:\n %s\n", err)
 			return
 		}
 		bc := NewDonutByteCode()
@@ -29,6 +31,7 @@ containing compiled homomorphic bytecode.`,
 			fmt.Printf("Error reading bytecode:\n %s\n", err)
 			return
 		}
+
 		globals := make([]object.Object, vm.GlobalsSize)
 		symbolTable := compiler.NewSymbolTable()
 		for i, v := range object.Builtins {
@@ -45,6 +48,22 @@ containing compiled homomorphic bytecode.`,
 		}
 
 		lastPopped := machine.LastPoppedStackElement()
+
+		outputFile, err := cmd.Flags().GetString("file")
+		if err != nil {
+			fmt.Printf("Error reading input flag `file`\n %s\n", err)
+			return
+		}
+		if lastPopped.Type() == object.CiphertextObj {
+			//left.(*object.Ciphertext).Value
+			ctxt := lastPopped.(*object.Ciphertext).Value
+			io.WriteCiphertext(&ctxt, outputFile)
+
+			// test
+			result := global.PriKey.Decrypt(ctxt)
+			fmt.Println(result)
+			// test
+		}
 		fmt.Println(lastPopped.Inspect())
 	},
 }
@@ -55,5 +74,7 @@ func appendFunctionCall(txn *DonutTransaction, bc *DonutBytecode) {
 }
 
 func init() {
-	rootCmd.AddCommand(runCmd)
+	rootCmd.AddCommand(execCmd)
+	execCmd.Flags().StringP("file", "o", "out.txn", "File name for transaction output")
+
 }

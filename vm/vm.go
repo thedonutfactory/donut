@@ -1,11 +1,16 @@
 package vm
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/thedonutfactory/donutbox/code"
 	"github.com/thedonutfactory/donutbox/compiler"
 	"github.com/thedonutfactory/donutbox/object"
+	"github.com/thedonutfactory/go-tfhe/core"
+	"github.com/thedonutfactory/go-tfhe/gates"
+
+	"github.com/thedonutfactory/donutbox/global"
 )
 
 // StackSize is an integer defining the size of our stack
@@ -21,10 +26,12 @@ const GlobalsSize = 65536
 // need one. Makes comparison easier as well because they always point to same place in memory
 
 // True - Pointer to a Monkey object.Boolean with value true
-var True = &object.Boolean{Value: true}
+// var True = &object.Boolean{Value: true}
+var True = &object.BooleanCiphertext{Value: global.PubKey.Constant(true)}
 
 // False - Pointer to a Monkey object.Boolean of value false
-var False = &object.Boolean{Value: false}
+//var False = &object.Boolean{Value: false}
+var False = &object.BooleanCiphertext{Value: global.PubKey.Constant(false)}
 
 // Null - Pointer to a Monkey object.Null
 var Null = &object.Null{}
@@ -338,15 +345,48 @@ func (vm *VM) executeBinaryOperation(op code.Opcode) error {
 	rightType := right.Type()
 
 	switch {
-	case leftType == object.IntegerObj && rightType == object.IntegerObj:
-		return vm.executeBinaryIntegerOperation(op, left, right)
-	case leftType == object.StringObj && rightType == object.StringObj:
-		return vm.executeBinaryStringOperation(op, left, right)
+	//case leftType == object.IntegerObj && rightType == object.IntegerObj:
+	//	return vm.executeBinaryIntegerOperation(op, left, right)
+	//case leftType == object.StringObj && rightType == object.StringObj:
+	//	return vm.executeBinaryStringOperation(op, left, right)
+	case leftType == object.CiphertextObj && rightType == object.CiphertextObj:
+		return vm.executeBinaryCiphertextOperation(op, left, right)
 	}
 
-	return fmt.Errorf("Unsupported types for binary operation: %s %s", leftType, rightType)
+	return fmt.Errorf("unsupported types for binary operation: %s %s", leftType, rightType)
 }
 
+func (vm *VM) executeBinaryCiphertextOperation(op code.Opcode, left, right object.Object) error {
+	leftValue := left.(*object.Ciphertext).Value
+	rightValue := right.(*object.Ciphertext).Value
+
+	var result gates.Int
+
+	switch op {
+	case code.OpAdd:
+		fmt.Printf("Executing homomorphic add operation with %d bits \n", global.NB_BITS)
+		result = global.Ops.Add(leftValue, rightValue, global.NB_BITS)
+	case code.OpSub:
+		fmt.Printf("Executing homomorphic sub operation with %d bits \n", global.NB_BITS)
+		result = global.Ops.Sub(leftValue, rightValue, global.NB_BITS)
+	case code.OpMul:
+		fmt.Printf("Executing homomorphic mul operation with %d bits \n", global.NB_BITS)
+		result = global.Ops.Mul(leftValue, rightValue, global.NB_BITS)
+	case code.OpDiv:
+		fmt.Printf("Executing homomorphic div operation with %d bits \n", global.NB_BITS)
+		result = global.Ops.Div(leftValue, rightValue, global.NB_BITS)
+	case code.OpMod:
+		// TODO fixme
+		fmt.Printf("Error: OpMod not currently implemented")
+		result = global.Ops.Div(leftValue, rightValue, global.NB_BITS)
+	default:
+		return fmt.Errorf("unknown ciphertext operator: %d", op)
+	}
+
+	return vm.push(&object.Ciphertext{Value: result})
+}
+
+/*
 func (vm *VM) executeBinaryIntegerOperation(op code.Opcode, left, right object.Object) error {
 	leftValue := left.(*object.Integer).Value
 	rightValue := right.(*object.Integer).Value
@@ -370,10 +410,11 @@ func (vm *VM) executeBinaryIntegerOperation(op code.Opcode, left, right object.O
 
 	return vm.push(&object.Integer{Value: result})
 }
+*/
 
 func (vm *VM) executeBinaryStringOperation(op code.Opcode, left, right object.Object) error {
 	if op != code.OpAdd {
-		return fmt.Errorf("Unknown String operator %d", op)
+		return fmt.Errorf("unknown String operator %d", op)
 	}
 
 	leftValue := left.(*object.String).Value
@@ -382,43 +423,111 @@ func (vm *VM) executeBinaryStringOperation(op code.Opcode, left, right object.Ob
 	return vm.push(&object.String{Value: leftValue + rightValue})
 }
 
+func intToCiphertext(val int) gates.Ctxt {
+	return global.PubKey.CipherBits(val, global.NB_BITS)
+}
+
 func (vm *VM) executeComparison(op code.Opcode) error {
 	right := vm.pop()
 	left := vm.pop()
 
-	if left.Type() == object.IntegerObj || right.Type() == object.IntegerObj {
-		return vm.executeIntegerComparison(op, left, right)
+	if left.Type() == object.CiphertextObj || right.Type() == object.CiphertextObj {
+		l, r := left, right
+
+		/*
+			if left.Type() != object.CiphertextObj {
+				l = &object.Ciphertext{Value: intToCiphertext(10)}
+			}
+			if right.Type() != object.CiphertextObj {
+				r = &object.Ciphertext{Value: intToCiphertext(10)}
+			}
+		*/
+
+		return vm.executeCiphertextComparison(op, l, r)
 	}
 
-	switch op {
-	case code.OpEqualEqual:
-		if right.Type() == object.StringObj && left.Type() == object.StringObj {
-			return vm.push(nativeBoolToBooleanObj(right.Inspect() == left.Inspect()))
-		}
-		return vm.push(nativeBoolToBooleanObj(right == left))
-	case code.OpNotEqual:
-		if right.Type() == object.StringObj && left.Type() == object.StringObj {
-			return vm.push(nativeBoolToBooleanObj(right.Inspect() != left.Inspect()))
-		}
-		return vm.push(nativeBoolToBooleanObj(right != left))
-	default:
-		return fmt.Errorf("Unknown operator: %d (%s %s)", op, left.Type(), right.Type())
+	if left.Type() == object.IntegerObj || right.Type() == object.IntegerObj {
+		return errors.New("integer objects are no longer allowed")
+		//return vm.executeIntegerComparison(op, left, right)
 	}
+	/*
+		switch op {
+		case code.OpEqualEqual:
+			if right.Type() == object.StringObj && left.Type() == object.StringObj {
+				return errors.New("string objects are no longer allowed")
+				//return vm.push(nativeBoolToBooleanObj(right.Inspect() == left.Inspect()))
+			}
+			// return vm.push(nativeBoolToBooleanObj(right == left))
+			return vm.push(toCiphertext(global.Ops.Equals(right, left, global.NB_BITS)))
+		case code.OpNotEqual:
+			if right.Type() == object.StringObj && left.Type() == object.StringObj {
+				return errors.New("string objects are no longer allowed")
+				//return vm.push(nativeBoolToBooleanObj(right.Inspect() != left.Inspect()))
+			}
+			return vm.push(nativeBoolToBooleanObj(right != left))
+		default:
+			return fmt.Errorf("unknown operator: %d (%s %s)", op, left.Type(), right.Type())
+		}
+	*/
+	return fmt.Errorf("unknown operator: %d (%s %s)", op, left.Type(), right.Type())
 }
 
 func (vm *VM) executeLogicalOperator(op code.Opcode) error {
 	right := vm.pop()
 	left := vm.pop()
 
-	var result bool
+	var result *object.Ciphertext
+
+	// leftValue := left.(*object.Ciphertext).Value
+	// rightValue := right.(*object.Ciphertext).Value
+
+	leftValue := left.(*object.BooleanCiphertext).Value
+	lv := global.Ctx.Int(global.NB_BITS)
+	lv[0] = leftValue
+
+	rightValue := right.(*object.BooleanCiphertext).Value
+	rv := global.Ctx.Int(global.NB_BITS)
+	rv[0] = rightValue
 
 	if op == code.OpAnd {
-		result = coerceObjToNativeBool(left) && coerceObjToNativeBool(right)
+		result = toCiphertext(global.Ops.And(lv, rv, global.NB_BITS))
+		//result = coerceObjToNativeBool(left) && coerceObjToNativeBool(right)
 	} else if op == code.OpOr {
-		result = coerceObjToNativeBool(left) || coerceObjToNativeBool(right)
+		result = toCiphertext(global.Ops.Or(lv, rv, global.NB_BITS))
+		//result = coerceObjToNativeBool(left) || coerceObjToNativeBool(right)
 	}
 
-	return vm.push(nativeBoolToBooleanObj(result))
+	return vm.push(result)
+}
+
+func (vm *VM) executeCiphertextComparison(op code.Opcode, left, right object.Object) error {
+	leftValue := left.(*object.Ciphertext).Value
+	rightValue := right.(*object.Ciphertext).Value
+
+	switch op {
+	case code.OpEqualEqual:
+		fmt.Println("Executing homomorphic Equals operation")
+		return vm.push(toCiphertext(global.Ops.Equals(rightValue, leftValue, global.NB_BITS)))
+		//return vm.push(nativeBoolToBooleanObj(rightValue == leftValue))
+	case code.OpNotEqual:
+		fmt.Println("Executing homomorphic Not Equals operation")
+		result := global.Ops.Equals(rightValue, leftValue, global.NB_BITS)
+		result = global.Ops.Not(result, global.NB_BITS)
+		return vm.push(toCiphertext(result))
+		//return vm.push(nativeBoolToBooleanObj(rightValue != leftValue))
+	case code.OpGreater:
+		fmt.Println("Executing homomorphic Gt operation")
+		result := global.Ops.Gt(leftValue, rightValue, global.NB_BITS)
+		return vm.push(toCiphertext(result))
+		//return vm.push(nativeBoolToBooleanObj(leftValue > rightValue))
+	case code.OpGreaterEqual:
+		fmt.Println("Executing homomorphic Gte operation")
+		result := global.Ops.Gte(leftValue, rightValue, global.NB_BITS)
+		return vm.push(toCiphertext(result))
+		//return vm.push(nativeBoolToBooleanObj(leftValue >= rightValue))
+	default:
+		return fmt.Errorf("unknown operator: %d", op)
+	}
 }
 
 func (vm *VM) executeIntegerComparison(op code.Opcode, left, right object.Object) error {
@@ -435,11 +544,17 @@ func (vm *VM) executeIntegerComparison(op code.Opcode, left, right object.Object
 	case code.OpGreaterEqual:
 		return vm.push(nativeBoolToBooleanObj(leftValue >= rightValue))
 	default:
-		return fmt.Errorf("Unknown operator: %d", op)
+		return fmt.Errorf("unknown operator: %d", op)
 	}
 }
 
-func nativeBoolToBooleanObj(input bool) *object.Boolean {
+func toCiphertext(ctxt []*core.LweSample) *object.Ciphertext {
+	return &object.Ciphertext{
+		Value: ctxt,
+	}
+}
+
+func nativeBoolToBooleanObj(input bool) *object.BooleanCiphertext {
 	if input {
 		return True
 	}
