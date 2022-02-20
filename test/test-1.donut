@@ -1,0 +1,27 @@
+// a simple calculate function
+let calculate = func(x, y) {
+    if (x < 10) {
+        return x + y
+    } else {
+        return x - y
+    }
+}
+
+// Flattened if-else calculation
+// FHE programs cannot use jump statements, 
+// all branches must be evaluated
+let ifElseFhe = func(x, y) {
+	let a = x + y;
+	let b = x - y;
+    let resultMask = x < 10;
+	return a*resultMask + b*(1-resultMask);
+}
+
+// Flattened if calculation
+// FHE programs cannot use jump statements, 
+// all branches must be evaluated
+let ifFhe = func(x, y) {
+	let a = x + y;
+    let resultMask = x < 10;
+	return a*resultMask;
+}

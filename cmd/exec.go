@@ -22,7 +22,7 @@ containing compiled homomorphic bytecode.`,
 		txn := &DonutTransaction{Version: 1}
 		err := txn.read(args[0])
 		if err != nil {
-			fmt.Printf("Error reading bytecode:\n %s\n", err)
+			fmt.Printf("Error reading transaction:\n %s\n", err)
 			return
 		}
 		bc := NewDonutByteCode()

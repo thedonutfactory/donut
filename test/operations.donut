@@ -1,21 +1,8 @@
-// a simple function that adds two numbers
-let addTwoNumbers = func(x, y) {
-    return x + y
-}
-
-// how about three numbers
-let addThreeNumbers = func(x, y, z) {
-    return x + y + z
-}
-
-// entrypoint
-let opLogicalOr = func(x, y) {
-    return false || true
-}
-
+/*
 let opLogicalAnd = func(x, y) {
     return true && true
 }
+*/
 
 let opLessThanEq = func(x, y) {
     return x <= y
@@ -55,14 +42,4 @@ let mulTwoNumbers = func(x, y) {
 
 let addAndSub = func(x, y, z) {
     return x + y - z
-}
-
-/*
-*
-* Every donut app has to have a main entrypoint
-*/
-let main = func() {
-    let a = 22
-    let b = 33
-    return addTwoNumbers(a, b)
 }

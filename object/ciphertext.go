@@ -15,4 +15,4 @@ type Ciphertext struct {
 func (i *Ciphertext) Type() ObjectType { return CiphertextObj }
 
 // Inspect returns a string representation of the Integer's Value
-func (i *Ciphertext) Inspect() string { return fmt.Sprintf("%d", i.Value) }
+func (i *Ciphertext) Inspect() string { return fmt.Sprintf("%v", i.Value) }

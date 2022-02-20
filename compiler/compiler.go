@@ -233,7 +233,7 @@ func (c *Compiler) Compile(node ast.Node) error {
 		case "--":
 			c.emit(code.OpMinusMinus)
 		default:
-			return fmt.Errorf("Unknown operator %s", node.Operator)
+			return fmt.Errorf("unknown operator %s", node.Operator)
 		}
 
 	case *ast.IfExpression:
@@ -242,33 +242,100 @@ func (c *Compiler) Compile(node ast.Node) error {
 			return err
 		}
 
-		// Emit an `OpJumpNotTruthy` with a bogus value. After compiling the consequence, we will know
-		// how far to jump and can come back and change it - "back-patching". Because we are creating
-		// a single pass compiler this is the solution, however more complex compilers may not come
-		// back to change this on first pass and instead fill it in on another pass
-		jumpNotTruthyPos := c.emit(code.OpJumpNotTruthy, 9999)
+		symbolCond := c.symbolTable.Define("cond")
+		conditionIndex := symbolCond.Index
+		c.emit(code.OpSetLocal, conditionIndex)
 
 		err = c.Compile(node.Consequence)
 		if err != nil {
 			return err
 		}
-
-		if c.lastInstructionIs(code.OpPop) {
+		if c.lastInstructionIs(code.OpPop) || c.lastInstructionIs(code.OpReturnValue) {
 			c.removeLastPop()
 		}
 
-		// Emit an `OpJump` with bogus value - see similar explanation above `jumpNotTruthyPos` variable declaration
-		jumpPos := c.emit(code.OpJump, 9999)
+		symbolConsequence := c.symbolTable.Define("cons")
+		consequenceIndex := symbolConsequence.Index
+		c.emit(code.OpSetLocal, consequenceIndex)
 
-		afterConsequencePos := len(c.currentInstructions())
-
-		// Change the jump-to position in the OpJumpNotTruthy emission earlier
-		c.changeOperand(jumpNotTruthyPos, afterConsequencePos)
+		c.emit(code.OpGetLocal, conditionIndex)
+		c.emit(code.OpGetLocal, consequenceIndex)
 
 		if node.Alternative == nil {
-			c.emit(code.OpNull)
+			//c.emit(code.OpNull)
 		} else {
+
+			if c.lastInstructionIs(code.OpReturnValue) {
+				c.removeLastPop()
+			}
+
 			err := c.Compile(node.Alternative)
+			if err != nil {
+				return err
+			}
+			if c.lastInstructionIs(code.OpPop) || c.lastInstructionIs(code.OpReturnValue) {
+				c.removeLastPop()
+			}
+
+			symbolAlternative := c.symbolTable.Define("alt")
+			alternativeIndex := symbolAlternative.Index
+			c.emit(code.OpSetLocal, alternativeIndex)
+
+			/*
+				// masked consequence
+				maskedConsequence := c.symbolTable.Define("mc")
+				maskedConsequenceIndex := maskedConsequence.Index
+				c.emit(code.OpSetLocal, maskedConsequenceIndex)
+
+					// consequence*resultMask + alternative*(1-resultMask);
+
+					symbolOne := c.symbolTable.Define("one")
+					symbolOneIndex := symbolOne.Index
+					c.emit(code.OpSetLocal, symbolOneIndex)
+					c.emit(code.OpSetLocal, conditionIndex)
+					c.emit(code.OpSub)
+					if c.lastInstructionIs(code.OpReturnValue) {
+						c.removeLastPop()
+					}
+
+					oneMinusMask := c.symbolTable.Define("onemm")
+					oneMinusMaskIndex := oneMinusMask.Index
+					c.emit(code.OpSetLocal, oneMinusMaskIndex)
+					c.emit(code.OpSetLocal, alternativeIndex)
+					c.emit(code.OpMul)
+					if c.lastInstructionIs(code.OpReturnValue) {
+						c.removeLastPop()
+					}
+
+					// masked alternative
+					symbolMaskedAlternative := c.symbolTable.Define("ma")
+					symbolMaskedAlternativeIndex := symbolMaskedAlternative.Index
+					c.emit(code.OpSetLocal, symbolMaskedAlternativeIndex)
+					c.emit(code.OpSetLocal, maskedConsequenceIndex)
+					c.emit(code.OpAdd)
+			*/
+
+		}
+
+		c.emit(code.OpMul)
+
+		//afterAlternativePos := len(c.currentInstructions())
+		// c.changeOperand(jumpPos, afterAlternativePos)
+
+	/*
+		case *ast.IfExpression:
+			err := c.Compile(node.Condition)
+			if err != nil {
+				return err
+			}
+
+			// Emit an `OpJumpNotTruthy` with a bogus value. After compiling the consequence, we will know
+			// how far to jump and can come back and change it - "back-patching". Because we are creating
+			// a single pass compiler this is the solution, however more complex compilers may not come
+			// back to change this on first pass and instead fill it in on another pass
+			jumpNotTruthyPos := c.emit(code.OpJumpNotTruthy, 9999)
+
+			err = c.Compile(node.Consequence)
 			if err != nil {
 				return err
 			}
@@ -276,10 +343,31 @@ func (c *Compiler) Compile(node ast.Node) error {
 			if c.lastInstructionIs(code.OpPop) {
 				c.removeLastPop()
 			}
-		}
 
-		afterAlternativePos := len(c.currentInstructions())
-		c.changeOperand(jumpPos, afterAlternativePos)
+			// Emit an `OpJump` with bogus value - see similar explanation above `jumpNotTruthyPos` variable declaration
+			jumpPos := c.emit(code.OpJump, 9999)
+
+			afterConsequencePos := len(c.currentInstructions())
+
+			// Change the jump-to position in the OpJumpNotTruthy emission earlier
+			c.changeOperand(jumpNotTruthyPos, afterConsequencePos)
+
+			if node.Alternative == nil {
+				c.emit(code.OpNull)
+			} else {
+				err := c.Compile(node.Alternative)
+				if err != nil {
+					return err
+				}
+
+				if c.lastInstructionIs(code.OpPop) {
+					c.removeLastPop()
+				}
+			}
+
+			afterAlternativePos := len(c.currentInstructions())
+			c.changeOperand(jumpPos, afterAlternativePos)
+	*/
 
 	case *ast.BlockStatement:
 		for _, s := range node.Statements {

@@ -1,0 +1,40 @@
+#!/bin/bash
+
+if [ -z "$1" ]
+  then
+    echo "error: no donut file specified. usage: './run test-1 [arg1,arg2,arg3]'"
+    exit 1
+fi
+
+# remove the extension, if it exists
+BASE_TARGET="${1%.*}"
+DONUT_SOURCE_FILE="${BASE_TARGET}.donut"
+DONUT_BYTECODE_FILE="${BASE_TARGET}.cipher"
+
+# run directly from source
+EXEC='go run ../main.go'
+
+# alternatively build the binary
+# go build -o donut ..
+# EXEC=donut
+
+# use the debug flag to create insecure, but fast executing keys
+${EXEC} keys --debug
+# compile the .donut source file
+${EXEC} compile ${DONUT_SOURCE_FILE}
+# create a new encrypted transaction to call the 0th indexed function in the compiled bytecode
+if [ -z "$2" ]
+  then
+    ${EXEC} txn ${DONUT_BYTECODE_FILE} -n 0 -i 5,3 -o in.txn
+  else
+    echo "Using args ${2}"
+    ${EXEC} txn ${DONUT_BYTECODE_FILE} -n 0 -i $2 -o in.txn
+fi
+# execute the transaction and export the encrypted results
+${EXEC} exec in.txn ${DONUT_BYTECODE_FILE} -o out.txn
+# decrypt the results
+${EXEC} dec -f out.txn
+
+# clean up
+rm *.cipher *.txn
+rm *.key
