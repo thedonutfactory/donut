@@ -160,18 +160,6 @@ func (vm *VM) Run() error {
 				return err
 			}
 
-		case code.OpJump:
-			pos := int(code.ReadUint16(ins[ip+1:]))
-			vm.currentFrame().ip = pos - 1
-
-		case code.OpJumpNotTruthy:
-			pos := int(code.ReadUint16(ins[ip+1:]))
-			vm.currentFrame().ip += 2
-			condition := vm.pop()
-			if !isTruthy(condition) {
-				vm.currentFrame().ip = pos - 1
-			}
-
 		case code.OpNull:
 			err := vm.push(Null)
 			if err != nil {

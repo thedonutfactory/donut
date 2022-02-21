@@ -260,6 +260,7 @@ func TestBooleanExpressions(t *testing.T) {
 	runCompilerTests(t, tests)
 }
 
+/*
 func TestConditionals(t *testing.T) {
 	tests := []compilerTestCase{
 		{
@@ -314,6 +315,7 @@ func TestConditionals(t *testing.T) {
 
 	runCompilerTests(t, tests)
 }
+*/
 
 func TestGlobalLetStatements(t *testing.T) {
 	tests := []compilerTestCase{

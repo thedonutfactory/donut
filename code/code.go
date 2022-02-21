@@ -86,10 +86,6 @@ const (
 	OpPlusPlus
 	OpMinusMinus
 
-	// Jump for conditionals
-	OpJumpNotTruthy // Jump to alternative if consequence is not truthy
-	OpJump          // Jump no matter what (if we evaluate consequence and dont want the alternative)
-
 	// Null
 	OpNull
 
@@ -128,39 +124,37 @@ type Definition struct {
 }
 
 var definitions = map[Opcode]*Definition{
-	OpConstant:      {"OpConstant", []int{2}}, // OpConstant is 2 bytes wide which makes it a uint16 (limits value to 65535)
-	OpAdd:           {"OpAdd", []int{}},
-	OpPop:           {"OpPop", []int{}},
-	OpSub:           {"OpSub", []int{}},
-	OpMul:           {"OpMul", []int{}},
-	OpDiv:           {"OpDiv", []int{}},
-	OpMod:           {"OpMod", []int{}},
-	OpTrue:          {"OpTrue", []int{}},
-	OpFalse:         {"OpFalse", []int{}},
-	OpEqualEqual:    {"OpEqualEqual", []int{}},
-	OpNotEqual:      {"OpNotEqual", []int{}},
-	OpGreater:       {"OpGreater", []int{}},
-	OpGreaterEqual:  {"OpGreaterEqual", []int{}},
-	OpAnd:           {"OpAnd", []int{}},
-	OpOr:            {"OpOr", []int{}},
-	OpMinus:         {"OpMinus", []int{}},
-	OpBang:          {"OpBang", []int{}},
-	OpPlusPlus:      {"OpPlusPlus", []int{}},
-	OpMinusMinus:    {"OpMinusMinus", []int{}},
-	OpJumpNotTruthy: {"OpJumpNotTruthy", []int{2}},
-	OpJump:          {"OpJump", []int{2}},
-	OpNull:          {"OpNull", []int{}},
-	OpGetGlobal:     {"OpGetGlobal", []int{2}},
-	OpSetGlobal:     {"OpSetGlobal", []int{2}},
-	OpArray:         {"OpArray", []int{2}},
-	OpHash:          {"OpHash", []int{2}},
-	OpIndex:         {"OpIndex", []int{}},
-	OpCall:          {"OpCall", []int{1}}, // OpCall is 1 byte wide which makes it a uint8 (limits value to 255)
-	OpReturnValue:   {"OpReturnValue", []int{}},
-	OpReturn:        {"OpReturn", []int{}},
-	OpGetLocal:      {"OpGetLocal", []int{1}},
-	OpSetLocal:      {"OpSetLocal", []int{1}},
-	OpGetBuiltin:    {"OpGetBuiltin", []int{1}},
+	OpConstant:     {"OpConstant", []int{2}}, // OpConstant is 2 bytes wide which makes it a uint16 (limits value to 65535)
+	OpAdd:          {"OpAdd", []int{}},
+	OpPop:          {"OpPop", []int{}},
+	OpSub:          {"OpSub", []int{}},
+	OpMul:          {"OpMul", []int{}},
+	OpDiv:          {"OpDiv", []int{}},
+	OpMod:          {"OpMod", []int{}},
+	OpTrue:         {"OpTrue", []int{}},
+	OpFalse:        {"OpFalse", []int{}},
+	OpEqualEqual:   {"OpEqualEqual", []int{}},
+	OpNotEqual:     {"OpNotEqual", []int{}},
+	OpGreater:      {"OpGreater", []int{}},
+	OpGreaterEqual: {"OpGreaterEqual", []int{}},
+	OpAnd:          {"OpAnd", []int{}},
+	OpOr:           {"OpOr", []int{}},
+	OpMinus:        {"OpMinus", []int{}},
+	OpBang:         {"OpBang", []int{}},
+	OpPlusPlus:     {"OpPlusPlus", []int{}},
+	OpMinusMinus:   {"OpMinusMinus", []int{}},
+	OpNull:         {"OpNull", []int{}},
+	OpGetGlobal:    {"OpGetGlobal", []int{2}},
+	OpSetGlobal:    {"OpSetGlobal", []int{2}},
+	OpArray:        {"OpArray", []int{2}},
+	OpHash:         {"OpHash", []int{2}},
+	OpIndex:        {"OpIndex", []int{}},
+	OpCall:         {"OpCall", []int{1}}, // OpCall is 1 byte wide which makes it a uint8 (limits value to 255)
+	OpReturnValue:  {"OpReturnValue", []int{}},
+	OpReturn:       {"OpReturn", []int{}},
+	OpGetLocal:     {"OpGetLocal", []int{1}},
+	OpSetLocal:     {"OpSetLocal", []int{1}},
+	OpGetBuiltin:   {"OpGetBuiltin", []int{1}},
 
 	// Has two operands, first is two bytes wide - the constant index. Specifies where in the constant pool we
 	// can find the *object.CompiledFunction that's to be converted into a closure. It's two bytes wide because
