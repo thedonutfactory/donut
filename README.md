@@ -24,8 +24,14 @@ Let's put together the workflow: develop an FHE program with Donut, compile it i
 
 ```js
 // a simple function that adds two numbers
-let addTwoNumbers = func(x, y) {
-    return x + y
+// when x is less than 10 and subtracts two
+// when x is freater than or equal to 10
+let calculate = func(x, y) {
+    if (x < 10) {
+        return x + y
+    } else {
+        return x - y
+    }
 }
 ```
 
