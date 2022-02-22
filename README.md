@@ -25,7 +25,7 @@ Let's put together the workflow: develop an FHE program with Donut, compile it i
 ```js
 // a simple function that adds two numbers
 // when x is less than 10 and subtracts two
-// when x is freater than or equal to 10
+// when x is greater than or equal to 10
 let calculate = func(x, y) {
     if (x < 10) {
         return x + y
@@ -47,7 +47,7 @@ let calculate = func(x, y) {
 
 `donut exec in.txn foo.cipher -o out.txn`
 
-5. Decrypt and view the resuling ciphertext:
+5. Decrypt and view the resulting ciphertext:
 
 `donut dec -f out.txn`
 
