@@ -39,7 +39,7 @@ let calculate = func(x, y) {
 
 `donut compile foo.donut`
 
-3. Create a transaction to execute against the 0th function (`addTwoNumbers`), with inputs 234 and 100, outputting to a file called `in.txn`
+3. Create a transaction to execute against the 0th function (`addTwoNumbers`), with inputs 3 and 2, outputting to a file called `in.txn`
 
 `donut txn foo.cipher -n 0 -i 3,2 -o in.txn`
 
