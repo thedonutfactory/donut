@@ -20,6 +20,12 @@ Run `donut eval` in your terminal to enter into interactive mode and play around
 
 Let's put together the workflow: develop an FHE program with Donut, compile it into intermediate encrypted bytecode, build an encrypted transaction, and execute it against the bytecode.
 
+0. Generate the public and private keys (only have to perform this step once):
+
+`donut -keys`
+
+The provider should only have access to the `public.key` file.
+
 1. Create a new donut file, `foo.donut` and add the following code:
 
 ```js
