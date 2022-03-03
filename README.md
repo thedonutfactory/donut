@@ -57,6 +57,14 @@ let calculate = func(x, y) {
 
 `donut dec -f out.txn`
 
+## TODO
+
+- [x] Homomorphic branching
+- [x] Serializable bytecode and transactions
+- [ ] Strongly typed ( u8, u16, i32, etc. )
+- [ ] Generalized serialization format for bytecode (via protocol buffers)
+- [ ] Addition of OO features for composable contracts ( classes, inheritance, etc )
+
 ## References
 
 [CGGI19]: I. Chillotti, N. Gama, M. Georgieva, and M. Izabachène. TFHE: Fast Fully Homomorphic Encryption over the Torus. In Journal of Cryptology, volume 33, pages 34–91 (2020). [PDF](https://eprint.iacr.org/2018/421.pdf)
