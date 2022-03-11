@@ -45,17 +45,23 @@ let calculate = func(x, y) {
 
 `donut compile foo.donut`
 
-3. Create a transaction to execute against the 0th function (`addTwoNumbers`), with inputs 3 and 2, outputting to a file called `in.txn`
+This compiled bytecode file, `foo.cipher`, can be hosted by any provider, on a public, private or hybrid cloud, or even on a completely untrusted computer.
+
+3. Create a transaction to execute against the 0th function (`calculate`), with inputs 3 and 2, outputting to a file called `in.txn`. This is the transaction that will be sent to the FHE donut program.
 
 `donut txn foo.cipher -n 0 -i 3,2 -o in.txn`
 
 4. Execute the transaction against compiled bytecode, saving the resulting ciphertext to `out.txn`:
 
-`donut exec in.txn foo.cipher -o out.txn`
+`donut exec in.txn foo.cipher -o out.data`
+
+In a peer-to-peer situation, this would be executed by the provider on their system, again everything is fully encrypted.
 
 5. Decrypt and view the resulting ciphertext:
 
-`donut dec -f out.txn`
+`donut dec -f out.data`
+
+Peer-to-peer, the provider sends back the resulting output from the results of executing the transaction in step 4. The user can decrypt the results, and the private key has never left their computer! 
 
 ## TODO
 
