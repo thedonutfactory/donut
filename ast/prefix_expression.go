@@ -3,7 +3,7 @@ package ast
 import (
 	"bytes"
 
-	"github.com/thedonutfactory/donutbox/token"
+	"github.com/thedonutfactory/donut/token"
 )
 
 // PrefixExpression - holds the token, a string version of the operator, and the expression to the right of it

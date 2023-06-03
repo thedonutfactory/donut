@@ -1,6 +1,6 @@
 package ast
 
-import "github.com/thedonutfactory/donutbox/token"
+import "github.com/thedonutfactory/donut/token"
 
 // IntegerLiteral - holds the token and it's value (int64)
 type IntegerLiteral struct {

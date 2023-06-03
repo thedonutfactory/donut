@@ -3,7 +3,7 @@ package object
 import (
 	"fmt"
 
-	"github.com/thedonutfactory/donutbox/code"
+	"github.com/thedonutfactory/donut/code"
 )
 
 // CompiledFunction holds the instructions we get from the compilation of a function

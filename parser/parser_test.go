@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/thedonutfactory/donutbox/ast"
-	"github.com/thedonutfactory/donutbox/lexer"
+	"github.com/thedonutfactory/donut/ast"
+	"github.com/thedonutfactory/donut/lexer"
 )
 
 func TestLetStatements(t *testing.T) {

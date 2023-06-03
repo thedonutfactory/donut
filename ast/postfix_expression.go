@@ -3,7 +3,7 @@ package ast
 import (
 	"bytes"
 
-	"github.com/thedonutfactory/donutbox/token"
+	"github.com/thedonutfactory/donut/token"
 )
 
 // PostfixExpression - holds the token we're operating on and postfix operator (--, ++)

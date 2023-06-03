@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/thedonutfactory/donutbox/ast"
-	"github.com/thedonutfactory/donutbox/token"
+	"github.com/thedonutfactory/donut/ast"
+	"github.com/thedonutfactory/donut/token"
 )
 
 func TestStringHashKey(t *testing.T) {

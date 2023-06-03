@@ -1,7 +1,7 @@
 package evaluator
 
 import (
-	"github.com/thedonutfactory/donutbox/object"
+	"github.com/thedonutfactory/donut/object"
 )
 
 var builtinFunctions = map[string]*object.Builtin{

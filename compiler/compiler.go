@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/thedonutfactory/donutbox/ast"
-	"github.com/thedonutfactory/donutbox/code"
-	"github.com/thedonutfactory/donutbox/object"
+	"github.com/thedonutfactory/donut/ast"
+	"github.com/thedonutfactory/donut/code"
+	"github.com/thedonutfactory/donut/object"
 )
 
 // Bytecode contains the Instructions our Compiler generated and the Constants the

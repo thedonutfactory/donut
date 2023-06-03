@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/thedonutfactory/donutbox/code"
-	"github.com/thedonutfactory/donutbox/global"
-	"github.com/thedonutfactory/donutbox/object"
+	"github.com/thedonutfactory/donut/code"
+	"github.com/thedonutfactory/donut/global"
+	"github.com/thedonutfactory/donut/object"
 )
 
 // transactionCmd represents the transaction command

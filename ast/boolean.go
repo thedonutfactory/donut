@@ -1,6 +1,6 @@
 package ast
 
-import "github.com/thedonutfactory/donutbox/token"
+import "github.com/thedonutfactory/donut/token"
 
 // Boolean - holds the token and it's value (a boolean)
 type Boolean struct {

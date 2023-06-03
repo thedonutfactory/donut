@@ -3,7 +3,7 @@ package ast
 import (
 	"bytes"
 
-	"github.com/thedonutfactory/donutbox/token"
+	"github.com/thedonutfactory/donut/token"
 )
 
 // IfExpression - holds the token, the condition expression and the consequence & alternative

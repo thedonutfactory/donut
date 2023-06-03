@@ -1,4 +1,4 @@
-module github.com/thedonutfactory/donutbox
+module github.com/thedonutfactory/donut
 
 go 1.19
 

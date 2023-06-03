@@ -1,6 +1,6 @@
 package ast
 
-import "github.com/thedonutfactory/donutbox/token"
+import "github.com/thedonutfactory/donut/token"
 
 // ExpressionStatement - holds the first token of the expression and the expression
 type ExpressionStatement struct {

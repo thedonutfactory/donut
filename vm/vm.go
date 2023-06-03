@@ -4,13 +4,13 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/thedonutfactory/donutbox/code"
-	"github.com/thedonutfactory/donutbox/compiler"
-	"github.com/thedonutfactory/donutbox/object"
+	"github.com/thedonutfactory/donut/code"
+	"github.com/thedonutfactory/donut/compiler"
+	"github.com/thedonutfactory/donut/object"
 	"github.com/thedonutfactory/go-tfhe/core"
 	"github.com/thedonutfactory/go-tfhe/gates"
 
-	"github.com/thedonutfactory/donutbox/global"
+	"github.com/thedonutfactory/donut/global"
 )
 
 // StackSize is an integer defining the size of our stack
@@ -30,7 +30,7 @@ const GlobalsSize = 65536
 var True = &object.BooleanCiphertext{Value: global.PubKey.Constant(true)}
 
 // False - Pointer to a Monkey object.Boolean of value false
-//var False = &object.Boolean{Value: false}
+// var False = &object.Boolean{Value: false}
 var False = &object.BooleanCiphertext{Value: global.PubKey.Constant(false)}
 
 // Null - Pointer to a Monkey object.Null

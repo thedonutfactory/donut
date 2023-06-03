@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/thedonutfactory/donutbox/repl"
+	"github.com/thedonutfactory/donut/repl"
 )
 
 // replCmd represents the repl command

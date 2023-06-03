@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"strings"
 
-	"github.com/thedonutfactory/donutbox/token"
+	"github.com/thedonutfactory/donut/token"
 )
 
 // HashLiteral - holds the '{' token and the pairs in the hash

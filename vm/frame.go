@@ -1,8 +1,8 @@
 package vm
 
 import (
-	"github.com/thedonutfactory/donutbox/code"
-	"github.com/thedonutfactory/donutbox/object"
+	"github.com/thedonutfactory/donut/code"
+	"github.com/thedonutfactory/donut/object"
 )
 
 // Frame - Data structure that holds execution-relevant information. Short for "call frame" or "stack frame"

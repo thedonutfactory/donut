@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/thedonutfactory/donutbox/ast"
-	"github.com/thedonutfactory/donutbox/compiler"
-	"github.com/thedonutfactory/donutbox/evaluator"
-	"github.com/thedonutfactory/donutbox/lexer"
-	"github.com/thedonutfactory/donutbox/object"
-	"github.com/thedonutfactory/donutbox/parser"
-	"github.com/thedonutfactory/donutbox/vm"
+	"github.com/thedonutfactory/donut/ast"
+	"github.com/thedonutfactory/donut/compiler"
+	"github.com/thedonutfactory/donut/evaluator"
+	"github.com/thedonutfactory/donut/lexer"
+	"github.com/thedonutfactory/donut/object"
+	"github.com/thedonutfactory/donut/parser"
+	"github.com/thedonutfactory/donut/vm"
 )
 
 // Oops ...need I explain?

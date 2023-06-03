@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/thedonutfactory/donutbox/object"
+	"github.com/thedonutfactory/donut/object"
 )
 
 var (
@@ -15,9 +15,9 @@ var (
 
 	// rootCmd represents the base command when called without any subcommands
 	rootCmd = &cobra.Command{
-		Use:   "donutbox",
-		Short: "🍩 Donutbox Fully Homomorphic Runtime Environment 🍩",
-		Long: `🍩 Donutbox 🍩 is a CLI that empowers the development of fully homomorphic
+		Use:   "donut",
+		Short: "🍩 Donut Fully Homomorphic Runtime Environment 🍩",
+		Long: `🍩 Donut is a CLI that empowers the development of fully homomorphic
 programs. It allows users to write programs in a new language called Donut,
 compile the programs into encrypted intermediate bytecode, and build 
 transactions to execute fully encrypted programs.`,
@@ -42,7 +42,7 @@ func init() {
 	// will be global for your application.
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "$HOME/.donutbox/config.yaml", "config file")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "$HOME/.donut/config.yaml", "config file")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -68,7 +68,7 @@ func initConfig() {
 	gob.Register(&object.CompiledFunction{})
 	gob.Register(&object.Closure{})
 
-	viper.AddConfigPath("$HOME/.donutbox")
+	viper.AddConfigPath("$HOME/.donut")
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
@@ -78,7 +78,7 @@ func initConfig() {
 		cobra.CheckErr(err)
 
 		// Search config in home directory with name ".cobra" (without extension).
-		viper.AddConfigPath(home + "/.donutbox")
+		viper.AddConfigPath(home + "/.donut")
 		viper.SetConfigType("yaml")
 		viper.SetConfigName("config")
 	}

@@ -1,7 +1,7 @@
 package lexer
 
 import (
-	"github.com/thedonutfactory/donutbox/token"
+	"github.com/thedonutfactory/donut/token"
 )
 
 // Lexer performs our lexical analysis/scanning

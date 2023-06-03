@@ -4,10 +4,10 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/thedonutfactory/donutbox/compiler"
-	"github.com/thedonutfactory/donutbox/global"
-	"github.com/thedonutfactory/donutbox/object"
-	"github.com/thedonutfactory/donutbox/vm"
+	"github.com/thedonutfactory/donut/compiler"
+	"github.com/thedonutfactory/donut/global"
+	"github.com/thedonutfactory/donut/object"
+	"github.com/thedonutfactory/donut/vm"
 	"github.com/thedonutfactory/go-tfhe/io"
 )
 

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"strings"
 
-	"github.com/thedonutfactory/donutbox/ast"
+	"github.com/thedonutfactory/donut/ast"
 )
 
 // Function holds Parameters as a slice of *Identifier, a Body which is a *ast.BlockStatement

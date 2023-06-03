@@ -3,7 +3,7 @@ package ast
 import (
 	"bytes"
 
-	"github.com/thedonutfactory/donutbox/token"
+	"github.com/thedonutfactory/donut/token"
 )
 
 // InfixExpression - holds the token, the expression to the left of it, a string version of

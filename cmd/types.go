@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/thedonutfactory/donutbox/compiler"
+	"github.com/thedonutfactory/donut/compiler"
 )
 
 type DonutBytecode struct {

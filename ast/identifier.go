@@ -1,6 +1,6 @@
 package ast
 
-import "github.com/thedonutfactory/donutbox/token"
+import "github.com/thedonutfactory/donut/token"
 
 // Identifier - holds IDENTIFIER token and it's value (add, foobar, x, y, ...)
 type Identifier struct {

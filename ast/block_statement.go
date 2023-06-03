@@ -3,7 +3,7 @@ package ast
 import (
 	"bytes"
 
-	"github.com/thedonutfactory/donutbox/token"
+	"github.com/thedonutfactory/donut/token"
 )
 
 // BlockStatement - holds the token "{", and a slice of statements

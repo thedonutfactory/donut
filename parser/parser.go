@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/thedonutfactory/donutbox/ast"
-	"github.com/thedonutfactory/donutbox/lexer"
-	"github.com/thedonutfactory/donutbox/token"
+	"github.com/thedonutfactory/donut/ast"
+	"github.com/thedonutfactory/donut/lexer"
+	"github.com/thedonutfactory/donut/token"
 )
 
 // Prefix expressions are often referred to as unary expressions: -x

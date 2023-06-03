@@ -1,6 +1,5 @@
 /*
 Copyright © 2021 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
@@ -8,7 +7,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/thedonutfactory/donutbox/global"
+	"github.com/thedonutfactory/donut/global"
 	"github.com/thedonutfactory/go-tfhe/io"
 )
 

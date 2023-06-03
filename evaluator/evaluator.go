@@ -3,8 +3,8 @@ package evaluator
 import (
 	"fmt"
 
-	"github.com/thedonutfactory/donutbox/ast"
-	"github.com/thedonutfactory/donutbox/object"
+	"github.com/thedonutfactory/donut/ast"
+	"github.com/thedonutfactory/donut/object"
 )
 
 // No need to create new true/false or null objects every time we encounter one, they will

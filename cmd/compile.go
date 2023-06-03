@@ -5,12 +5,12 @@ import (
 	"io/ioutil"
 
 	"github.com/spf13/cobra"
-	"github.com/thedonutfactory/donutbox/compiler"
-	"github.com/thedonutfactory/donutbox/lexer"
-	"github.com/thedonutfactory/donutbox/object"
-	"github.com/thedonutfactory/donutbox/parser"
+	"github.com/thedonutfactory/donut/compiler"
+	"github.com/thedonutfactory/donut/lexer"
+	"github.com/thedonutfactory/donut/object"
+	"github.com/thedonutfactory/donut/parser"
 
-	"github.com/thedonutfactory/donutbox/global"
+	"github.com/thedonutfactory/donut/global"
 )
 
 // compileCmd represents the compile command

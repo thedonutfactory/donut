@@ -3,7 +3,7 @@ package ast
 import (
 	"testing"
 
-	"github.com/thedonutfactory/donutbox/token"
+	"github.com/thedonutfactory/donut/token"
 )
 
 func TestRootNode(t *testing.T) {
