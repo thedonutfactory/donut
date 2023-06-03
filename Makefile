@@ -1,17 +1,25 @@
-GOPATH:=$(shell go env GOPATH)
+# Go parameters
+GOCMD = go
+GOBUILD = $(GOCMD) build
+GOCLEAN = $(GOCMD) clean
+GOTEST = $(GOCMD) test
+GOGET = $(GOCMD) get
+BINARY_NAME = donut
+BINARY_UNIX = $(BINARY_NAME)_unix
 
-.PHONY: run
-run:
-	go run main.go
-
-.PHONY: build-mac
-build-mac:
-	go build -o donutbox *.go
-
-.PHONY: build-linux
-build-linux:
-	CGO_ENABLED=0 GOOS=linux go build -o donutbox
-
-.PHONY: test
+all: test build
+build:
+	$(GOBUILD) -o $(BINARY_NAME) -v
 test:
-	go test -v -race ./... | sed ''/PASS/s//$$(printf "\033[32mPASS\033[0m")/'' | sed ''/FAIL/s//$$(printf "\033[31mFAIL\033[0m")/''
+	$(GOTEST) -v ./...
+clean:
+	$(GOCLEAN)
+	rm -f $(BINARY_NAME)
+	rm -f $(BINARY_UNIX)
+run:
+	$(GOBUILD) -o $(BINARY_NAME) -v
+	./$(BINARY_NAME)
+deps:
+	$(GOGET) ./...
+build-linux:
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o $(BINARY_UNIX) -v

@@ -1,13 +1,11 @@
 module github.com/thedonutfactory/donutbox
 
-go 1.17
-
-replace github.com/thedonutfactory/go-tfhe => ../go-tfhe/
+go 1.19
 
 require (
 	github.com/spf13/cobra v1.3.0
 	github.com/spf13/viper v1.10.1
-	github.com/thedonutfactory/go-tfhe v0.0.0-20211221212523-170308961d71
+	github.com/thedonutfactory/go-tfhe v0.1.0
 )
 
 require (
