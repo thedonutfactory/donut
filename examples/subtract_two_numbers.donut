@@ -1,0 +1,6 @@
+/*
+ * Add or subtract two integers and return the result
+ */
+let calculate = func(x, y) {
+    return x - y
+}
