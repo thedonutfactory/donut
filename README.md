@@ -10,7 +10,7 @@ Donut is a cryptosystem that supports arbitrary computation on ciphertexts known
 
 ## Buidl
 
-`go build -o donut`
+`make`
 
 ## Eval
 
